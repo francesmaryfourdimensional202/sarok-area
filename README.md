@@ -1,53 +1,75 @@
-# 🌌 Sarok-Area
+# Sarok Area
 
-A centralized repository for my personal Arch Linux configurations, focused on a smooth workflow with the **Niri** window manager and **Quickshell**.
+Personal Arch Linux dotfiles and system setup. One command installs everything.
 
-## ✨ Overview
-This repository contains my personal "Dotfiles" and configurations for:
-- **Window Manager:** Niri
-- **Shell:** Fish (with Starship prompt)
-- **Terminal:** Kitty
-- **Desktop Shell:** Custom Niri-Caelestia (Quickshell based)
-- **Utilities:** Yazi, Btop, Cava, and more.
+## What's Included
 
----
+| Component | App |
+|---|---|
+| Window Manager | [Niri](https://github.com/YaLTeR/niri) |
+| Shell | [Fish](https://fishshell.com/) + [Starship](https://starship.rs/) |
+| Terminal | [Kitty](https://sw.kovidgoyal.net/kitty/) |
+| Desktop Shell | Caelestia (Quickshell-based) |
+| File Manager | [Yazi](https://github.com/sxyazi/yazi) |
+| Media | mpd, mpv |
+| System | btop, fastfetch |
+| Apps | Brave, Vesktop, WhatsApp, Telegram, and more |
 
-## 🚀 Installation
+## One-Command Install
 
-Follow these steps to set up the environment on your system:
-
-### 1. Clone the Repository
 ```bash
-cd ~/Documents/Projects
-git clone git@github.com:sarok-exe/sarok-area.git
-cd sarok-area
+curl -fsSL https://raw.githubusercontent.com/sarok-exe/sarok-area/main/install.sh | bash
 ```
 
-2. Install Dependencies
-Make sure you have the required packages installed (Arch Linux):
+This will:
+1. Clone this repo to `~/sarok-area`
+2. Install all pacman packages
+3. Install yay + AUR packages
+4. Install Flatpak apps
+5. Deploy dotfiles via symlinks
+6. Build the Caelestia plugin
+7. Set Fish as default shell and enable services
 
-```Bash
-sudo pacman -S niri fish kitty starship quickshell-git networkmanager pipewire btop yazi
+## Manual Install
+
+```bash
+git clone git@github.com:sarok-exe/sarok-area.git ~/sarok-area
+cd ~/sarok-area
+chmod +x setup.sh
+./setup.sh
 ```
 
-3. Deploy Configurations
-You can manually copy the configurations to your ~/.config folder or create symbolic links:
+## Structure
 
-```Bash
-# Example for Niri
-ln -s ~/Documents/Projects/sarok-area/.config/niri ~/.config/niri
-
-# Example for Fish
-ln -s ~/Documents/Projects/sarok-area/.config/fish ~/.config/fish
+```
+sarok-area/
+├── .config/          # All user configs (symlinked to ~/.config/)
+│   ├── niri/         # Window manager config
+│   ├── fish/         # Shell config, functions, themes
+│   ├── kitty/        # Terminal config
+│   ├── quickshell/   # Desktop shell + Caelestia plugin
+│   ├── btop/         # System monitor
+│   ├── cava/         # Audio visualizer
+│   ├── mpd/          # Music daemon
+│   ├── mpv/          # Video player
+│   ├── yazi/         # File manager
+│   ├── fastfetch/    # System info
+│   ├── fcitx5/       # Input method
+│   └── starship.toml # Prompt config
+├── etc/              # System-level configs (copied to /etc/)
+├── install.sh        # Bootstrap script (curl | bash)
+├── setup.sh          # Main installer
+├── LICENSE
+└── README.md
 ```
 
-4. Build the Shell (Optional)
-If you are using the Quickshell-based desktop, build it:
+## Customization
 
-```Bash
-cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
-cmake --build build
-cmake --install build
-```
-Maintained with ❤️ by Sarok
+To add or update configs:
+1. Edit the file directly in `~/sarok-area/.config/`
+2. Since it's symlinked, changes take effect immediately
+3. Commit and push to sync across machines
 
+## License
+
+GPL-3.0 — see [LICENSE](LICENSE).
