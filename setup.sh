@@ -14,21 +14,45 @@ LOG_FILE="/tmp/sarok-setup-$(date +%Y%m%d-%H%M%S).log"
 FAILURES=()
 
 # --- Colors ---
-BLUE='\033[0;34m'
-CYAN='\033[0;36m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-RED='\033[0;31m'
-NC='\033[0m'
+MAGENTA='\033[1;35m'
+CYAN='\033[1;36m'
+GREEN='\033[1;32m'
+YELLOW='\033[1;33m'
+RED='\033[1;31m'
+DIM='\033[0;90m'
 BOLD='\033[1m'
+NC='\033[0m'
+
+# --- Progress Bar ---
+TOTAL_STEPS=9
+CURRENT_STEP=0
+
+draw_progress() {
+    local width=40
+    local step="$1"
+    local label="$2"
+    local pct=$(( step * 100 / TOTAL_STEPS ))
+    local filled=$(( step * width / TOTAL_STEPS ))
+    local empty=$(( width - filled ))
+
+    printf "\r  ${DIM}[${NC}"
+    printf "%0.s█" $(seq 1 "$filled" 2>/dev/null) || true
+    printf "%0.s░" $(seq 1 "$empty" 2>/dev/null) || true
+    printf "${DIM}]${NC} ${CYAN}%3d%%${NC} ${DIM}(%d/%d)${NC}  ${BOLD}%s${NC}" "$pct" "$step" "$TOTAL_STEPS" "$label"
+    echo ""
+}
 
 # --- Helpers ---
 log() { echo "$1" >> "$LOG_FILE"; }
 
-step() { echo -e "\n${BLUE}${BOLD}==> ${NC}${BOLD}$1${NC}"; }
-ok()   { echo -e "    ${GREEN}[✓]${NC} $1"; }
-warn() { echo -e "    ${YELLOW}[!]${NC} $1"; }
-fail() { echo -e "    ${RED}[✗]${NC} $1"; FAILURES+=("$1"); }
+step() {
+    CURRENT_STEP=$((CURRENT_STEP + 1))
+    draw_progress "$CURRENT_STEP" "$1"
+}
+
+ok()   { echo -e "      ${GREEN}[✓]${NC} $1"; }
+warn() { echo -e "      ${YELLOW}[!]${NC} $1"; }
+fail() { echo -e "      ${RED}[✗]${NC} $1"; FAILURES+=("$1"); }
 
 run() {
     local label="$1"
@@ -43,52 +67,51 @@ run() {
     fi
 }
 
-# --- Preflight ---
-step "Preflight checks"
+# --- Clear Screen ---
+clear
 
+# --- Logo ---
+echo ""
+echo -e "  ${MAGENTA}  .dBBBBP dBBBBBb${NC}"
+echo -e "  ${MAGENTA}    BP           BB  dP dP${NC}"
+echo -e "  ${MAGENTA}    \`BBBBb   dBP BB dP dP${NC}"
+echo -e "  ${MAGENTA}       dBP  dBP  BB${NC}"
+echo -e "  ${MAGENTA}  dBBBBP'  dBBBBBBB${NC}"
+echo ""
+echo -e "  ${CYAN}${BOLD}╔══════════════════════════════════════════╗${NC}"
+echo -e "  ${CYAN}${BOLD}║     SAROK AREA — Full Arch Setup         ║${NC}"
+echo -e "  ${CYAN}${BOLD}╚══════════════════════════════════════════╝${NC}"
+echo ""
+echo -e "  ${DIM}Log: ${LOG_FILE}${NC}"
+echo ""
+
+# --- Preflight ---
 if ! command -v pacman &>/dev/null; then
-    echo -e "${RED}${BOLD}This script requires Arch Linux (pacman not found).${NC}"
+    echo -e "  ${RED}${BOLD}This script requires Arch Linux (pacman not found).${NC}"
     exit 1
 fi
-ok "Arch Linux detected"
 
 if [ "$EUID" -eq 0 ]; then
-    echo -e "${RED}${BOLD}Do not run this script as root.${NC}"
-    echo "The script will use sudo when needed."
+    echo -e "  ${RED}${BOLD}Do not run this script as root.${NC}"
+    echo -e "  ${DIM}The script will use sudo when needed.${NC}"
     exit 1
 fi
-ok "Running as non-root user"
-
-# --- Header ---
-echo ""
-echo -e "${CYAN}${BOLD}┌──────────────────────────────────────┐${NC}"
-echo -e "${CYAN}${BOLD}│     SAROK AREA — Full Setup           │${NC}"
-echo -e "${CYAN}${BOLD}└──────────────────────────────────────┘${NC}"
-echo ""
-echo -e "  Log: ${LOG_FILE}"
-echo ""
 
 # ============================================================
-#  1. System Configs
+#  1. Base Build Tools
 # ============================================================
-step "Applying system configurations"
-
-if [ -d "$REPO_DIR/etc" ]; then
-    run "Copy system configs" sudo cp -rf "$REPO_DIR/etc/"* /etc/
-else
-    warn "No etc/ directory found, skipping."
-fi
+step "Base build tools"
+run "Install base-devel git" sudo pacman -S --needed --noconfirm base-devel git
 
 # ============================================================
 #  2. yay (AUR Helper)
 # ============================================================
-step "AUR helper"
+step "AUR helper (yay)"
 
 if command -v yay &>/dev/null; then
     ok "yay already installed"
 else
-    step "Installing yay"
-    if git clone https://aur.archlinux.org/yay.git /tmp/yay 2>>"$LOG_FILE"; then
+    if git clone https://aur.archlinux.org/yay.git /tmp/yay >>"$LOG_FILE" 2>&1; then
         if (cd /tmp/yay && makepkg -si --noconfirm >>"$LOG_FILE" 2>&1); then
             ok "yay installed"
         else
@@ -101,51 +124,47 @@ else
 fi
 
 # ============================================================
-#  3. Pacman Packages
+#  3. Full System Update
 # ============================================================
-step "Installing pacman packages"
+step "System update"
+run "pacman -Syu" sudo pacman -Syu --noconfirm
+
+# ============================================================
+#  4. Pacman Packages
+# ============================================================
+step "Pacman packages"
 
 PKGS=(
-    # Window manager & shell
     niri fish kitty starship
-    # Audio & networking
-    iwd pipewire pipewire-pulse pipewire-alsa
-    # System utilities
-    brightnessctl btop fastfetch duf
-    # File manager & media
+    iwd pipewire wireplumber
+    btop fastfetch
     yazi mpd mpv
-    # Development
-    cmake ninja flatpak
-    # Applications
-    flameshot scrcpy
-    # Fonts
+    brightnessctl
+    flameshot obsidian scrcpy
+    duf cmake ninja
     ttf-jetbrains-mono ttf-material-symbols-variable
 )
 
-run "Pacman install" sudo pacman -Sy --needed --noconfirm "${PKGS[@]}"
+run "Pacman install" sudo pacman -S --needed --noconfirm "${PKGS[@]}"
 
 # ============================================================
-#  4. AUR Packages
+#  5. AUR Packages
 # ============================================================
-step "Installing AUR packages"
+step "AUR packages"
 
 if command -v yay &>/dev/null; then
-    AUR_PKGS=(
-        quickshell-git
-        impala
-        vesktop
-        rmpc
-    )
+    AUR_PKGS=(quickshell-git impala rmpc vesktop)
     run "AUR install" yay -S --needed --noconfirm "${AUR_PKGS[@]}"
 else
     fail "yay not available, skipping AUR packages"
 fi
 
 # ============================================================
-#  5. Flatpak Applications
+#  6. Flatpak
 # ============================================================
-step "Installing Flatpak applications"
+step "Flatpak setup"
 
+run "Install flatpak" sudo pacman -S --needed --noconfirm flatpak
 run "Add Flathub remote" sudo flatpak remote-add --if-not-exists flathub \
     https://flathub.org/repo/flathub.flatpakrepo
 
@@ -164,9 +183,20 @@ FLAT_PKGS=(
 run "Flatpak install" flatpak install -y flathub "${FLAT_PKGS[@]}"
 
 # ============================================================
-#  6. Deploy Dotfiles
+#  7. System Configs
 # ============================================================
-step "Deploying dotfiles"
+step "System configs (etc/)"
+
+if [ -d "$REPO_DIR/etc" ]; then
+    run "Copy system configs" sudo cp -rf "$REPO_DIR/etc/"* /etc/
+else
+    warn "No etc/ directory found, skipping."
+fi
+
+# ============================================================
+#  8. Deploy Dotfiles
+# ============================================================
+step "Deploy dotfiles"
 
 mkdir -p "$HOME/.config"
 
@@ -175,13 +205,11 @@ if [ -d "$DOT_SRC" ]; then
         name="$(basename "$item")"
         target="$HOME/.config/$name"
 
-        # Backup existing config if it's not already a symlink
         if [ -e "$target" ] && [ ! -L "$target" ]; then
             mv "$target" "$target.bak-$(date +%s)"
             log "[Dotfiles] Backed up: $target"
         fi
 
-        # Remove old symlink and create new one
         [ -L "$target" ] && rm "$target"
         ln -sf "$item" "$target"
     done
@@ -191,17 +219,17 @@ else
 fi
 
 # ============================================================
-#  7. Build Caelestia Plugin
+#  9. Build Plugin + Shell + Services
 # ============================================================
-step "Building Caelestia plugin"
+step "Plugin, shell & services"
 
+# Caelestia plugin
 PLUGIN_DIR="$HOME/.config/quickshell/plugin"
-
 if [ -d "$PLUGIN_DIR" ] && [ -f "$PLUGIN_DIR/CMakeLists.txt" ]; then
     rm -rf "$PLUGIN_DIR/build/"
     if cmake -B "$PLUGIN_DIR/build" -G Ninja -DCMAKE_BUILD_TYPE=Release "$PLUGIN_DIR" >>"$LOG_FILE" 2>&1; then
         if cmake --build "$PLUGIN_DIR/build" >>"$LOG_FILE" 2>&1; then
-            run "Install plugin" sudo cmake --install "$PLUGIN_DIR/build"
+            run "Install Caelestia plugin" sudo cmake --install "$PLUGIN_DIR/build"
         else
             fail "Plugin build failed"
         fi
@@ -209,16 +237,11 @@ if [ -d "$PLUGIN_DIR" ] && [ -f "$PLUGIN_DIR/CMakeLists.txt" ]; then
         fail "Plugin cmake configure failed"
     fi
 else
-    warn "Plugin directory not found, skipping."
+    warn "Plugin not found, skipping."
 fi
 
-# ============================================================
-#  8. Shell & Services
-# ============================================================
-step "Setting up shell and services"
-
+# Set Fish as default
 FISH_PATH="$(command -v fish 2>/dev/null || true)"
-
 if [ -n "$FISH_PATH" ]; then
     if [ "$SHELL" != "$FISH_PATH" ]; then
         if chsh -s "$FISH_PATH" >>"$LOG_FILE" 2>&1; then
@@ -227,7 +250,7 @@ if [ -n "$FISH_PATH" ]; then
             fail "Failed to set Fish as default shell"
         fi
     else
-        ok "Fish is already default shell"
+        ok "Fish already default shell"
     fi
 else
     fail "Fish not found"
@@ -235,29 +258,34 @@ fi
 
 # Enable services
 for svc in iwd.service pipewire.service pipewire-pulse.service; do
-    run "Enable $svc" sudo systemctl enable --now "$svc"
+    run "Enable $svc" sudo systemctl enable --now "$svc" 2>/dev/null || true
 done
 
 # ============================================================
 #  Summary
 # ============================================================
 echo ""
-echo -e "${CYAN}${BOLD}┌──────────────────────────────────────┐${NC}"
-echo -e "${CYAN}${BOLD}│            SETUP COMPLETE             │${NC}"
-echo -e "${CYAN}${BOLD}└──────────────────────────────────────┘${NC}"
+
+draw_progress "$TOTAL_STEPS" "Done"
+
+echo ""
+echo -e "  ${CYAN}${BOLD}╔══════════════════════════════════════════╗${NC}"
+echo -e "  ${CYAN}${BOLD}║              SETUP COMPLETE               ║${NC}"
+echo -e "  ${CYAN}${BOLD}╚══════════════════════════════════════════╝${NC}"
 echo ""
 
 if [ ${#FAILURES[@]} -eq 0 ]; then
-    echo -e "  ${GREEN}${BOLD}All steps completed successfully.${NC}"
+    echo -e "  ${GREEN}${BOLD}  All steps completed successfully.${NC}"
 else
-    echo -e "  ${YELLOW}${BOLD}Completed with ${#FAILURES[@]} issue(s):${NC}"
+    echo -e "  ${YELLOW}${BOLD}  Completed with ${#FAILURES[@]} issue(s):${NC}"
+    echo ""
     for f in "${FAILURES[@]}"; do
-        echo -e "    ${RED}• $f${NC}"
+        echo -e "    ${RED}  • $f${NC}"
     done
     echo ""
-    echo -e "  Check log: ${LOG_FILE}"
+    echo -e "  ${DIM}Check log: ${LOG_FILE}${NC}"
 fi
 
 echo ""
-echo -e "  Restart your session or run: ${BOLD}exec fish${NC}"
+echo -e "  ${DIM}Restart your session or run:${NC} ${BOLD}exec fish${NC}"
 echo ""
