@@ -1,0 +1,17 @@
+# Ignore build directories
+build/
+sarok-area/build/
+
+# Ignore Qt/CMake temporary files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.moc
+moc_*.cpp
+*.so
+
+# Ignore local logs and caches
+*.log
+.cache/
+assets/

@@ -1,0 +1,4 @@
+Server = http://mirror.abderraziq.com/archlinux/$repo/os/$arch
+Server = https://mirror.abderraziq.com/archlinux/$repo/os/$arch
+Server = https://cloudflaremirrors.com/archlinux/$repo/os/$arch
+Server = https://archlinux.mirror.constant.com/$repo/os/$arch
