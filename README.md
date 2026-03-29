@@ -7,7 +7,7 @@ Personal Arch Linux dotfiles and system setup. One command installs everything.
 | Component | App |
 |---|---|
 | Window Manager | [Niri](https://github.com/YaLTeR/niri) |
-| Shell | [Fish](https://fishshell.com/) + [Starship](https://starship.rs/) |
+| Shell | [Bash](https://www.gnu.org/software/bash/) + [Starship](https://starship.rs/) |
 | Terminal | [Kitty](https://sw.kovidgoyal.net/kitty/) |
 | Desktop Shell | Caelestia (Quickshell-based) |
 | File Manager | [Yazi](https://github.com/sxyazi/yazi) |
@@ -28,7 +28,7 @@ This will:
 4. Install Flatpak apps
 5. Deploy dotfiles via symlinks
 6. Build the Caelestia plugin
-7. Set Fish as default shell and enable services
+7. Set Bash as default shell with Starship prompt and enable services
 
 ## Manual Install
 
@@ -45,7 +45,6 @@ chmod +x setup.sh
 sarok-area/
 ├── .config/          # All user configs (symlinked to ~/.config/)
 │   ├── niri/         # Window manager config
-│   ├── fish/         # Shell config, functions, themes
 │   ├── kitty/        # Terminal config
 │   ├── quickshell/   # Desktop shell + Caelestia plugin
 │   ├── btop/         # System monitor

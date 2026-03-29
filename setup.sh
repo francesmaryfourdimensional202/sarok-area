@@ -135,7 +135,7 @@ run "pacman -Syu" sudo pacman -Syu --noconfirm
 step "Pacman packages"
 
 PKGS=(
-    niri fish kitty starship
+    niri kitty starship
     iwd pipewire wireplumber
     btop fastfetch
     yazi mpd mpv
@@ -241,20 +241,28 @@ else
     warn "Plugin not found, skipping."
 fi
 
-# Set Fish as default
-FISH_PATH="$(command -v fish 2>/dev/null || true)"
-if [ -n "$FISH_PATH" ]; then
-    if [ "$SHELL" != "$FISH_PATH" ]; then
-        if chsh -s "$FISH_PATH" >>"$LOG_FILE" 2>&1; then
-            ok "Fish set as default shell"
+# Set Bash as default with Starship
+BASH_PATH="$(command -v bash 2>/dev/null || true)"
+if [ -n "$BASH_PATH" ]; then
+    if [ "$SHELL" != "$BASH_PATH" ]; then
+        if chsh -s "$BASH_PATH" >>"$LOG_FILE" 2>&1; then
+            ok "Bash set as default shell"
         else
-            fail "Failed to set Fish as default shell"
+            fail "Failed to set Bash as default shell"
         fi
     else
-        ok "Fish already default shell"
+        ok "Bash already default shell"
     fi
 else
-    fail "Fish not found"
+    fail "Bash not found"
+fi
+
+# Configure Starship prompt in .bashrc
+if ! grep -q 'starship init bash' "$HOME/.bashrc" 2>/dev/null; then
+    echo 'eval "$(starship init bash)"' >> "$HOME/.bashrc"
+    ok "Starship prompt added to .bashrc"
+else
+    ok "Starship already in .bashrc"
 fi
 
 # Enable services
@@ -288,5 +296,5 @@ else
 fi
 
 echo ""
-echo -e "  ${DIM}Restart your session or run:${NC} ${BOLD}exec fish${NC}"
+echo -e "  ${DIM}Restart your session or run:${NC} ${BOLD}exec bash${NC}"
 echo ""
