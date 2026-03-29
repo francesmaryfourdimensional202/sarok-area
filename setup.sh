@@ -141,7 +141,7 @@ PKGS=(
     yazi mpd mpv
     brightnessctl
     flameshot obsidian scrcpy
-    duf cmake ninja
+    duf cmake ninja aubio
     ttf-jetbrains-mono ttf-material-symbols-variable
 )
 
