@@ -1,8 +1,12 @@
+# --- [ System Defaults ] ---
+127.0.0.1    localhost
+::1          localhost
+
 # --- [ Comprehensive Porn & Adult Content Block ] ---
 127.0.0.1    pornhub.com www.pornhub.com pornhub.xxx pornhub.org
 127.0.0.1    xvideos.com www.xvideos.com xvideos.es xvideos2.com
 127.0.0.1    xnxx.com www.xnxx.com xnxx.es xnxx.tv xnxx2.com
-127.0.0.1    xhamster.com www.xhamster.com xhamster1.com xhamster.desi
+127.0.0.1    xhamster.com www.xhamster.com xhamster1.com xhamster2.com xhamster.desi
 127.0.0.1    porn.com www.porn.com porn.net porn.xxx
 127.0.0.1    youporn.com www.youporn.com yp.com
 127.0.0.1    redtube.com www.redtube.com redtube.net
@@ -23,10 +27,19 @@
 127.0.0.1    thumbzilla.com www.thumbzilla.com
 127.0.0.1    yourporn.sexy www.yourporn.sexy
 127.0.0.1    periscope.tv www.periscope.tv
-127.0.0.1    omegle.com www.omegle.com
-127.0.0.1    ome.tv www.ome.tv
 127.0.0.1    stripchat.com www.stripchat.com
 127.0.0.1    camsoda.com www.camsoda.com
+127.0.0.1    daftsex.com www.daftsex.com
+127.0.0.1    missav.com www.missav.com
+127.0.0.1    javmost.com www.javmost.com
+127.0.0.1    txxx.com www.txxx.com
+127.0.0.1    fapello.com www.fapello.com
+
+# --- [ Gambling & Betting ] ---
+127.0.0.1    1xbet.com www.1xbet.com
+127.0.0.1    bet365.com www.bet365.com
+127.0.0.1    stake.com www.stake.com
+127.0.0.1    roobet.com www.roobet.com
 
 # --- [ Time Wasters & Brain Rot ] ---
 127.0.0.1    x.com www.x.com twitter.com www.twitter.com
@@ -34,7 +47,9 @@
 127.0.0.1    instagram.com www.instagram.com
 127.0.0.1    facebook.com www.facebook.com
 127.0.0.1    snapchat.com www.snapchat.com
-
-# --- [ System Defaults ] ---
-127.0.0.1    localhost
-::1          localhost
+127.0.0.1    reddit.com www.reddit.com
+127.0.0.1    9gag.com www.9gag.com
+127.0.0.1    pinterest.com www.pinterest.com
+127.0.0.1    twitch.tv www.twitch.tv
+127.0.0.1    omegle.com www.omegle.com
+127.0.0.1    ome.tv www.ome.tv
