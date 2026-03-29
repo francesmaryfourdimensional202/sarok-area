@@ -82,6 +82,36 @@ This will:
 
 Logs are saved to `~/caelestia_update.log`.
 
+## Hosts File Blocking
+
+The `etc/hosts` file blocks distracting and harmful websites system-wide. After installation, the hosts file is locked with `chattr +i` to prevent accidental modification.
+
+**Blocked categories:**
+- Time wasters (social media, meme sites)
+- Gambling & betting sites
+- Porn & adult content
+
+**To modify the blocklist:**
+
+```bash
+# Unlock the file
+sudo chattr -i /etc/hosts
+
+# Edit with your editor
+sudo nano /etc/hosts
+
+# Lock it again
+sudo chattr +i /etc/hosts
+```
+
+**To re-deploy after updating the repo:**
+
+```bash
+cd ~/.sarok-area
+sudo cp -f etc/hosts /etc/hosts
+sudo chattr +i /etc/hosts
+```
+
 ## Customization
 
 To add or update configs:
