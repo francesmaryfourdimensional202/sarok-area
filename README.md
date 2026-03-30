@@ -43,22 +43,28 @@ chmod +x setup.sh
 
 ```
 sarok-area/
-├── .config/          # All user configs (symlinked to ~/.config/)
-│   ├── niri/         # Window manager config
-│   ├── kitty/        # Terminal config
-│   ├── quickshell/   # Desktop shell + Caelestia plugin
-│   ├── btop/         # System monitor
-│   ├── cava/         # Audio visualizer
-│   ├── mpd/          # Music daemon
-│   ├── mpv/          # Video player
-│   ├── yazi/         # File manager
-│   ├── fastfetch/    # System info
-│   ├── fcitx5/       # Input method
-│   └── starship.toml # Prompt config
-├── etc/              # System-level configs (copied to /etc/)
-├── install.sh        # Bootstrap script (curl | bash)
-├── setup.sh          # Main installer
-├── update_shell.sh   # Update Caelestia shell plugin
+├── .bashrc             # Shell config
+├── .bash_profile       # Login shell config
+├── pkg_list.txt        # Reference package list
+├── .config/            # All user configs (symlinked to ~/.config/)
+│   ├── niri/           # Window manager config
+│   ├── kitty/          # Terminal config
+│   ├── quickshell/     # Desktop shell + Caelestia plugin
+│   ├── btop/           # System monitor
+│   ├── cava/           # Audio visualizer
+│   ├── mpv/            # Video player
+│   ├── yazi/           # File manager
+│   ├── fastfetch/      # System info
+│   ├── nvim/           # Neovim config
+│   ├── micro/          # Micro editor config
+│   ├── dunst/          # Notification daemon
+│   ├── thefuck/        # Command correction
+│   └── starship.toml   # Prompt config
+├── etc/                # System-level configs (copied to /etc/)
+├── install.sh          # Bootstrap script (curl | bash)
+├── setup.sh            # Main installer
+├── update_shell.sh     # Update Caelestia shell plugin
+├── multipath-wifi.sh   # Combine two WiFi adapters for speed
 ├── LICENSE
 └── README.md
 ```
@@ -80,6 +86,18 @@ This will:
 4. Optionally restart the shell
 
 Logs are saved to `~/caelestia_update.log`.
+
+## Multipath WiFi (Dual Adapters)
+
+If you're using two WiFi adapters (wlan0 + wlan1), use `multipath-wifi.sh` to combine them for increased bandwidth:
+
+```bash
+cd ~/.sarok-area
+chmod +x multipath-wifi.sh
+./multipath-wifi.sh
+```
+
+This creates a multipath route that balances traffic across both adapters. Requires `nload` (installed by setup.sh) to monitor network usage.
 
 ## Hosts File Blocking
 
